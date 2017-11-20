@@ -2,8 +2,10 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/appLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg1"
     tools:context="com.example.learnupp.numbers.MainActivity">
 
     <TextView
@@ -12,33 +14,105 @@
         android:layout_height="wrap_content"
         android:text="Hello World!"
         android:textSize="42sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.69" />
+
+    <TextView
+        android:id="@+id/res_bad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:layout_marginRight="10dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/colon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=":"
+        android:textColor="@android:color/black"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:layout_marginRight="4dp"
+        app:layout_constraintRight_toLeftOf="@+id/res_bad"
+        app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/res_good"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textColor="@android:color/holo_green_dark"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:layout_marginRight="4dp"
+        app:layout_constraintRight_toLeftOf="@+id/colon"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/NextButton"
+        android:id="@+id/Asn1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onClickNextButton"
+        android:onClick="onClickAns1"
         android:text="Next"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginRight="10dp"
+        android:layout_marginRight="2dp"
         android:layout_marginBottom="10dp"
-        tools:layout_editor_absoluteX="280dp"
+        tools:layout_editor_absoluteY="447dp" />
+
+    <Button
+        android:id="@+id/Asn2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onClickAns2"
+        android:text="Back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/Asn1"
+        android:layout_marginRight="2dp"
+        android:layout_marginBottom="10dp"
+        tools:layout_editor_absoluteY="447dp" />
+
+    <Button
+        android:id="@+id/Asn3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onClickAns3"
+        android:text="Down"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/Asn2"
+        android:layout_marginRight="2dp"
+        android:layout_marginBottom="10dp"
+        tools:layout_editor_absoluteY="447dp" />
+
+    <Button
+        android:id="@+id/Asn4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onClickAns4"
+        android:text="Uppp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/Asn3"
+        android:layout_marginRight="2dp"
+        android:layout_marginBottom="10dp"
         tools:layout_editor_absoluteY="447dp" />
 
     <com.example.learnupp.numbers.GIFView
         android:id="@+id/ivButter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
+        android:visibility="invisible"
         app:src="@drawable/butterfly"
+        android:layout_marginBottom="120dp"
         app:layout_constraintBottom_toTopOf="@+id/sample_text"
         app:layout_constraintRight_toRightOf="parent"/>
 
 
 </android.support.constraint.ConstraintLayout>
-    <!--android:visibility="invisible"-->
+    <!--android:layout_marginBottom="85dp"-->
