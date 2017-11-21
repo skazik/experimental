@@ -118,7 +118,7 @@
         android:id="@+id/imageCard1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="6dp"
         android:layout_marginTop="6dp"
         android:src="@drawable/cblack_joker"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -129,22 +129,22 @@
         android:id="@+id/imageCard2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="2dp"
+        android:layout_marginLeft="6dp"
         android:layout_marginTop="6dp"
         android:src="@drawable/c2_of_clubs"
-        app:layout_constraintLeft_toRightOf="@+id/imageCard1"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageCard1"
+        app:layout_constraintLeft_toLeftOf="parent"
         tools:layout_editor_absoluteY="16dp" />
 
     <ImageView
         android:id="@+id/imageCard3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
+        android:layout_marginLeft="6dp"
         android:layout_marginTop="6dp"
         android:src="@drawable/cred_joker"
-        app:layout_constraintLeft_toRightOf="@+id/imageCard2"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageCard2"
+        app:layout_constraintLeft_toLeftOf="parent"
         tools:layout_editor_absoluteY="16dp" />
 
 

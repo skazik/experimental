@@ -4,11 +4,9 @@ import java.io.InputStream;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Movie;
-import android.net.Uri;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -18,22 +16,26 @@ public class GIFView extends View {
 
     public GIFView(Context context) {
         super(context);
+        this.gifId =R.drawable.butterfly;
         initializeView();
     }
 
     public GIFView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.gifId =R.drawable.butterfly;
         initializeView();
     }
 
     public GIFView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        this.gifId =R.drawable.butterfly;
         initializeView();
     }
 
     private void initializeView() {
         //R.drawable.loader - our animated GIF
-        @SuppressLint("ResourceType") InputStream is = getContext().getResources().openRawResource(R.drawable.butterfly);
+        // @SuppressLint("ResourceType") InputStream is = getContext().getResources().openRawResource(R.drawable.butterfly);
+        @SuppressLint("ResourceType") InputStream is = getContext().getResources().openRawResource(this.gifId);
         mMovie = Movie.decodeStream(is);
     }
 

@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     Button btAns3;
     Button btAns4;
     Random mode;
-    int bg_select = 1;
+    int bg_select = 0;
     Integer bad, good;
     ImageView imgCard1,imgCard2,imgCard3;
 
@@ -66,7 +66,8 @@ public class MainActivity extends AppCompatActivity {
         //{R.drawable.c4_of_clubs,	R.drawable.c4_of_diamonds,	R.drawable.c4_of_hearts,	R.drawable.c4_of_spades},
     };
 
-    Animation animFadeIn,animFadeOut,animBlink,animZoomIn,animZoomOut,animRotate,
+    Animation animFadeIn,animFadeOut,animZoomIn,animZoomOut,animRotate,
+            animFadeOutOnce, animFadeInOnce,
             animMove,animMove1,animMove2,
             animSlideUp,animSlideDown,animBounce,animSlideLeft,animSlideRight;
     // Used to load the 'native-lib' library on application startup.
@@ -120,8 +121,10 @@ public class MainActivity extends AppCompatActivity {
         animRotate = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate);
         animBounce = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce);
 
+        animFadeOutOnce = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out);
         animFadeOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out);
         animFadeIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
+        animFadeInOnce = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
 
         animZoomIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoom_in);
         animZoomOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoom_out);
@@ -168,6 +171,28 @@ public class MainActivity extends AppCompatActivity {
                 tvQuest.startAnimation(animFadeIn);
             }
         });
+        animFadeOutOnce.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {}
+            @Override
+            public void onAnimationRepeat(Animation animation) {}
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                gvButter.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        animFadeInOnce.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {}
+            @Override
+            public void onAnimationRepeat(Animation animation) {}
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                gvButter.setVisibility(View.VISIBLE);
+            }
+        });
+
         animSlideLeft.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {}
@@ -252,19 +277,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void changeBackground()
     {
-        bg_select=mode.nextInt(7);
-        int resin[7] = {R.drawable.bg1, R.drawable.bg2, R.drawable.bg3, R.drawable.bg4, R.drawable.bg5, R.drawable.bg6, R.drawable.bg7}
-        switch(bg_select)
-        {
-            case 1: resin = R.drawable.bg1; break;
-            case 2: resin = R.drawable.bg2; break;
-            case 3: resin = R.drawable.bg3; break;
-            case 4: resin = R.drawable.bg4; break;
-            case 5: resin = R.drawable.bg5; break;
-            default:resin = R.drawable.bg1; break;
-        }
+        if (++bg_select > 6) bg_select = 0;
+        final int[] resin = new int[]{R.drawable.bg1, R.drawable.bg2, R.drawable.bg3, R.drawable.bg4, R.drawable.bg5, R.drawable.bg6, R.drawable.bg7};
         ConstraintLayout layout = (ConstraintLayout) findViewById(R.id.appLayout);
-        layout.setBackgroundResource(resin);
+        layout.setBackgroundResource(resin[bg_select]);
     }
 
     public void validateAns(String txt)
@@ -272,7 +288,9 @@ public class MainActivity extends AppCompatActivity {
         String res = resultFromJNI();
         if (res.compareTo(txt) == 0)
         {
-            gvButter.setVisibility(View.VISIBLE);
+            if (gvButter.getVisibility() == View.INVISIBLE)
+                gvButter.startAnimation(animFadeInOnce);
+
             good++;
             tvGood.setText(good.toString());
 
@@ -284,7 +302,8 @@ public class MainActivity extends AppCompatActivity {
         }
         bad++;
         tvBad.setText(bad.toString());
-        gvButter.setVisibility(View.INVISIBLE);
+        if (gvButter.getVisibility() == View.VISIBLE)
+            gvButter.startAnimation(animFadeOutOnce);
     }
 
     public void onClickAns1(View v) {
