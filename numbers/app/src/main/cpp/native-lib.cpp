@@ -177,15 +177,15 @@ void generate_test(TestInfo_t *info, bool bGenerate = true)
     while (info)
     {
         if (bGenerate)
-    {
-        memset(info, 0, sizeof(TestInfo_t));
+        {
+            memset(info, 0, sizeof(TestInfo_t));
 
             while (check_no_more_than_one_zero(info) == false)
-        {
-            info->num1 = rand()%10;
-            info->num2 = rand()%10;
-            info->num3 = rand()%10;
-        }
+            {
+                info->num1 = rand()%10;
+                info->num2 = rand()%10;
+                info->num3 = rand()%10;
+            }
         }
         info->correct = rand()%4+1;
 
@@ -195,8 +195,8 @@ void generate_test(TestInfo_t *info, bool bGenerate = true)
 
         if (bGenerate)
         {
-        info->act1 = (MathAction_t) (rand() % act_leveling);
-        info->act2 = (MathAction_t) (rand() % act_leveling);
+            info->act1 = (MathAction_t) (rand() % act_leveling);
+            info->act2 = (MathAction_t) (rand() % act_leveling);
         }
 
         if (PRIORITY(info->act1) >= PRIORITY(info->act2))
@@ -263,7 +263,8 @@ Java_com_example_learnupp_numbers_MainActivity_resultFromJNI(
         JNIEnv *env,
         jobject /* this */) {
     char out[64];
-    sprintf(out, "%d", test.result);
+    int res = (int) round(test.result);
+    sprintf(out, "%d", res);
     std::string output = out;
     return env->NewStringUTF(output.c_str());
 }

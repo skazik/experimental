@@ -307,8 +307,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickAns1(View v) {
-//        if (gvButter.getVisibility() != View.VISIBLE)
-//            gvButter.setVisibility(gvButter.getVisibility() == View.VISIBLE ? View.INVISIBLE : View.VISIBLE);
         validateAns(btAns1.getText().toString());
         generateNewQuest();
     }
