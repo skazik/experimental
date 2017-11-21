@@ -38,7 +38,7 @@ struct TestInfo_t
 #define PRIORITY(_arg) (((_arg == Act_Multiply) || (_arg == Act_Divide)) ? 1:0)
 
 static char ActSimbol[] = "+-*/";
-static DiffLevel_t ActLevel = Lev_VeryBeginer;
+static DiffLevel_t ActLevel = Lev_AllIncluded;//Lev_VeryBeginer;
 
 int calculate(int num1, int &num2, MathAction_t act, bool bAdj)
 {
@@ -127,38 +127,44 @@ bool calcBack(TestInfo_t *info, int* res = 0)
 void adjust_wres(TestInfo_t *info)
 {
     if (info->result == info->wresult1)
-        info->wresult1 = calculate(info->result, info->num3?info->num3:info->num2?info->num2:info->num1, info->act2, false);
+    {
+        if ((info->act1 == info->act2) && (info->act1 == Act_Multiply))
+            info->wresult1 = info->num1 * info->num3;
+        else
+            info->wresult1 = calculate(info->result, info->num3?info->num3:info->num2?info->num2:info->num1, info->act2, false);
+    }
     if (info->result == info->wresult1)
-        info->wresult1++;
-    info->wresult2 = (info->result + info->wresult1) / 2;
+        info->wresult1 += rand()%9;
+    info->wresult2 = (info->result + info->wresult1) / 2 + info->num2;
     while (info->wresult2 == info->result || info->wresult2 == info->wresult1)
         info->wresult2++;
-    info->wresult3 = info->result + (info->result + info->wresult1) / 2;
+    info->wresult3 = info->wresult2 + (info->result + info->wresult1) / 2;
     while (info->wresult3 == info->result || info->wresult3 == info->wresult1 || info->wresult3 == info->wresult2)
-        info->wresult3--;
+        info->wresult3 -= rand()%9;
 }
 
 void generate_test(TestInfo_t *info)
 {
-    static int num_of_calls = 0;
     static int initialized = 0;
     if (!initialized)
     {
         srand(time(NULL));
         initialized = 1;
     }
-//    if (++num_of_calls > 20)
-//        ActLevel = (DiffLevel_t)((int)ActLevel +1);
-//    if (ActLevel > Lev_Iourka)
-//        ActLevel = Lev_JustProgress;
 
     while (info)
     {
         memset(info, 0, sizeof(TestInfo_t));
 
-        info->num1 = rand()%10;
-        info->num2 = rand()%10;
-        info->num3 = rand()%10;
+        while ((!info->num1 && !info->num2) ||
+               (!info->num1 && !info->num3) ||
+               (!info->num2 && !info->num3))
+        {
+            info->num1 = rand()%10;
+            info->num2 = rand()%10;
+            info->num3 = rand()%10;
+        }
+
         info->correct = rand()%4+1;
 
         int act_leveling = ActLevel == Lev_VeryBeginer ? Act_Multiply :

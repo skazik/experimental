@@ -1,5 +1,6 @@
 package com.example.learnupp.numbers;
 
+import android.media.Image;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.Random;
@@ -22,9 +24,51 @@ public class MainActivity extends AppCompatActivity {
     Random mode;
     int bg_select = 1;
     Integer bad, good;
+    ImageView imgCard1,imgCard2,imgCard3;
+
     final int test_level_switch = 5;
+    final int[][] cdres = new int[][]
+    {
+        {
+            R.drawable.cred_joker, R.drawable.cred_joker, R.drawable.cblack_joker, R.drawable.cblack_joker
+        },
+        {
+            R.drawable.cace_of_clubs, R.drawable.cace_of_diamonds, R.drawable.cace_of_hearts, R.drawable.cace_of_spades
+        },
+        {
+            R.drawable.cjack_of_clubs2, R.drawable.cjack_of_diamonds2, R.drawable.cjack_of_hearts2, R.drawable.cjack_of_spades2
+        },
+        {
+            R.drawable.cqueen_of_clubs2, R.drawable.cqueen_of_diamonds2, R.drawable.cqueen_of_hearts2, R.drawable.cqueen_of_spades2
+        },
+        {
+            R.drawable.cking_of_clubs2, R.drawable.cking_of_diamonds2, R.drawable.cking_of_hearts2, R.drawable.cking_of_spades2
+        },
+        {
+            R.drawable.c5_of_clubs, R.drawable.c5_of_diamonds, R.drawable.c5_of_hearts, R.drawable.c5_of_spades
+        },
+        {
+            R.drawable.c6_of_clubs, R.drawable.c6_of_diamonds, R.drawable.c6_of_hearts, R.drawable.c6_of_spades
+        },
+        {
+            R.drawable.c7_of_clubs, R.drawable.c7_of_diamonds, R.drawable.c7_of_hearts, R.drawable.c7_of_spades
+        },
+        {
+            R.drawable.c8_of_clubs, R.drawable.c8_of_diamonds, R.drawable.c8_of_hearts, R.drawable.c8_of_spades
+        },
+        {
+            R.drawable.c9_of_clubs, R.drawable.c9_of_diamonds, R.drawable.c9_of_hearts, R.drawable.c9_of_spades
+        },
+
+        //{R.drawable.c10_of_clubs,	R.drawable.c10_of_diamonds,	R.drawable.c10_of_hearts,	R.drawable.c10_of_spades},
+        //{R.drawable.c2_of_clubs,	R.drawable.c2_of_diamonds,	R.drawable.c2_of_hearts,	R.drawable.c2_of_spades},
+        //{R.drawable.c3_of_clubs,	R.drawable.c3_of_diamonds,	R.drawable.c3_of_hearts,	R.drawable.c3_of_spades},
+        //{R.drawable.c4_of_clubs,	R.drawable.c4_of_diamonds,	R.drawable.c4_of_hearts,	R.drawable.c4_of_spades},
+    };
+
     Animation animFadeIn,animFadeOut,animBlink,animZoomIn,animZoomOut,animRotate,
-            animMove,animSlideUp,animSlideDown,animBounce,animSequential,animSlideLeft,animSlideRight;
+            animMove,animMove1,animMove2,
+            animSlideUp,animSlideDown,animBounce,animSlideLeft,animSlideRight;
     // Used to load the 'native-lib' library on application startup.
     static {
         System.loadLibrary("native-lib");
@@ -42,6 +86,9 @@ public class MainActivity extends AppCompatActivity {
     public native String get4valFromJNI();
     public native String levelUpFromJNI();
     public native String getLevelFromJNI();
+    public native int getNum1FromJNI();
+    public native int getNum2FromJNI();
+    public native int getNum3FromJNI();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +110,10 @@ public class MainActivity extends AppCompatActivity {
         btAns3 = (Button) findViewById(R.id.Asn3);
         btAns4 = (Button) findViewById(R.id.Asn4);
 
+        imgCard1 = (ImageView) findViewById(R.id.imageCard1);
+        imgCard2 = (ImageView) findViewById(R.id.imageCard2);
+        imgCard3 = (ImageView) findViewById(R.id.imageCard3);
+
         animSlideUp = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.slide_up);
         animSlideDown = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.slide_down);
 
@@ -77,6 +128,10 @@ public class MainActivity extends AppCompatActivity {
 
         animSlideLeft = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_left);
         animSlideRight = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_right);
+
+        animMove = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move);
+        animMove1 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move);
+        animMove2 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move);
 
         makeQuestAndAns();
 
@@ -124,6 +179,28 @@ public class MainActivity extends AppCompatActivity {
                 tvQuest.startAnimation(animSlideRight);
             }
         });
+        animMove.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {}
+            @Override
+            public void onAnimationRepeat(Animation animation) {}
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                imgCard2.startAnimation(animMove1);
+                imgCard2.setVisibility(View.VISIBLE);
+            }
+        });
+        animMove1.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {}
+            @Override
+            public void onAnimationRepeat(Animation animation) {}
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                imgCard1.startAnimation(animMove2);
+                imgCard1.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     private void makeQuestAndAns() {
@@ -132,6 +209,14 @@ public class MainActivity extends AppCompatActivity {
         btAns2.setText(get2valFromJNI());
         btAns3.setText(get3valFromJNI());
         btAns4.setText(get4valFromJNI());
+
+        imgCard1.setImageResource(cdres[getNum1FromJNI()][mode.nextInt(4)]);
+        imgCard2.setImageResource(cdres[getNum2FromJNI()][mode.nextInt(4)]);
+        imgCard3.setImageResource(cdres[getNum3FromJNI()][mode.nextInt(4)]);
+
+        imgCard1.setVisibility(View.INVISIBLE);
+        imgCard2.setVisibility(View.INVISIBLE);
+        imgCard3.startAnimation(animMove);
     }
 
     public void generateNewQuest()
@@ -167,8 +252,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void changeBackground()
     {
-        if (++bg_select > 5) bg_select=1;
-        int resin;
+        bg_select=mode.nextInt(7);
+        int resin[7] = {R.drawable.bg1, R.drawable.bg2, R.drawable.bg3, R.drawable.bg4, R.drawable.bg5, R.drawable.bg6, R.drawable.bg7}
         switch(bg_select)
         {
             case 1: resin = R.drawable.bg1; break;

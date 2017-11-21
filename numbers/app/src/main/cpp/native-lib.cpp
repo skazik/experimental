@@ -129,38 +129,44 @@ bool calcBack(TestInfo_t *info, int* res = 0)
 void adjust_wres(TestInfo_t *info)
 {
     if (info->result == info->wresult1)
-        info->wresult1 = calculate(info->result, info->num3?info->num3:info->num2?info->num2:info->num1, info->act2, false);
+    {
+        if ((info->act1 == info->act2) && (info->act1 == Act_Multiply))
+            info->wresult1 = info->num1 * info->num3;
+        else
+            info->wresult1 = calculate(info->result, info->num3?info->num3:info->num2?info->num2:info->num1, info->act2, false);
+    }
     if (info->result == info->wresult1)
-        info->wresult1++;
-    info->wresult2 = (info->result + info->wresult1) / 2;
+        info->wresult1 += rand()%9;
+    info->wresult2 = (info->result + info->wresult1) / 2 + info->num2;
     while (info->wresult2 == info->result || info->wresult2 == info->wresult1)
         info->wresult2++;
-    info->wresult3 = info->result + (info->result + info->wresult1) / 2;
+    info->wresult3 = info->wresult2 + (info->result + info->wresult1) / 2;
     while (info->wresult3 == info->result || info->wresult3 == info->wresult1 || info->wresult3 == info->wresult2)
-        info->wresult3--;
+        info->wresult3 -= rand()%9;
 }
 
 void generate_test(TestInfo_t *info)
 {
-    static int num_of_calls = 0;
     static int initialized = 0;
     if (!initialized)
     {
         srand(time(NULL));
         initialized = 1;
     }
-//    if (++num_of_calls > 25)
-//        ActLevel = (DiffLevel_t)((int)ActLevel +1);
-//    if (ActLevel > Lev_Iourka)
-//        ActLevel = Lev_JustProgress;
 
     while (info)
     {
         memset(info, 0, sizeof(TestInfo_t));
 
-        info->num1 = rand()%10;
-        info->num2 = rand()%10;
-        info->num3 = rand()%10;
+        while ((!info->num1 && !info->num2) ||
+               (!info->num1 && !info->num3) ||
+               (!info->num2 && !info->num3))
+        {
+            info->num1 = rand()%10;
+            info->num2 = rand()%10;
+            info->num3 = rand()%10;
+        }
+
         info->correct = rand()%4+1;
 
         int act_leveling = ActLevel == Lev_VeryBeginer ? Act_Multiply :
@@ -311,3 +317,30 @@ Java_com_example_learnupp_numbers_MainActivity_getLevelFromJNI(
     return env->NewStringUTF(out);
 }
 
+extern "C"
+JNIEXPORT int
+
+JNICALL
+Java_com_example_learnupp_numbers_MainActivity_getNum1FromJNI(
+        JNIEnv *env,
+        jobject /* this */) {
+    return test.num1;
+}
+extern "C"
+JNIEXPORT int
+
+JNICALL
+Java_com_example_learnupp_numbers_MainActivity_getNum2FromJNI(
+        JNIEnv *env,
+        jobject /* this */) {
+    return test.num2;
+}
+extern "C"
+JNIEXPORT int
+
+JNICALL
+Java_com_example_learnupp_numbers_MainActivity_getNum3FromJNI(
+        JNIEnv *env,
+        jobject /* this */) {
+    return test.num3;
+}
