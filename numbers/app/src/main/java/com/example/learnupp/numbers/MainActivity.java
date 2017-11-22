@@ -1,6 +1,6 @@
 package com.example.learnupp.numbers;
 
-import android.media.Image;
+import android.os.CountDownTimer;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,7 +15,7 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
-    TextView tvQuest, tvBad, tvGood;
+    TextView tvQuest, tvBad, tvGood, tvCardsRes, tvCount, tvAverage;
     GIFView gvButter;
     Button btAns1;
     Button btAns2;
@@ -25,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
     int bg_select = 0;
     Integer bad, good;
     ImageView imgCard1,imgCard2,imgCard3;
+    CountDownTimer countDownTimer = null;
+    long mStartTime, mElapsedTime;
 
     final int test_level_switch = 5;
     final int[][] cdres = new int[][]
@@ -114,6 +116,9 @@ public class MainActivity extends AppCompatActivity {
         imgCard1 = (ImageView) findViewById(R.id.imageCard1);
         imgCard2 = (ImageView) findViewById(R.id.imageCard2);
         imgCard3 = (ImageView) findViewById(R.id.imageCard3);
+        tvCardsRes = (TextView) findViewById(R.id.tvCardResult);
+        tvCount = (TextView) findViewById(R.id.count);
+        tvAverage = (TextView) findViewById(R.id.average);
 
         animSlideUp = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.slide_up);
         animSlideDown = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.slide_down);
@@ -224,28 +229,56 @@ public class MainActivity extends AppCompatActivity {
             public void onAnimationEnd(Animation animation) {
                 imgCard1.startAnimation(animMove2);
                 imgCard1.setVisibility(View.VISIBLE);
+                tvCardsRes.setVisibility(View.VISIBLE);
             }
         });
     }
 
     private void makeQuestAndAns() {
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
+
         tvQuest.setText(stringFromJNI());
         btAns1.setText(get1valFromJNI());
         btAns2.setText(get2valFromJNI());
         btAns3.setText(get3valFromJNI());
         btAns4.setText(get4valFromJNI());
 
-        imgCard1.setImageResource(cdres[getNum1FromJNI()][mode.nextInt(4)]);
-        imgCard2.setImageResource(cdres[getNum2FromJNI()][mode.nextInt(4)]);
-        imgCard3.setImageResource(cdres[getNum3FromJNI()][mode.nextInt(4)]);
+        int i1 = getNum1FromJNI();
+        int i2 = getNum2FromJNI();
+        int i3 = getNum3FromJNI();
+
+        imgCard1.setImageResource(cdres[i1][mode.nextInt(4)]);
+        imgCard2.setImageResource(cdres[i2][mode.nextInt(4)]);
+        imgCard3.setImageResource(cdres[i3][mode.nextInt(4)]);
+        tvCardsRes.setVisibility(View.INVISIBLE);
+        tvCardsRes.setText(new Integer(i1+i2+i3).toString());
 
         imgCard1.setVisibility(View.INVISIBLE);
         imgCard2.setVisibility(View.INVISIBLE);
         imgCard3.startAnimation(animMove);
+
+        countDownTimer = new CountDownTimer(11000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                long disp = (long)(millisUntilFinished / 1000)-1;
+                tvCount.setText("00:0" + disp);
+            }
+
+            public void onFinish() {
+                tvCount.setText("--:--");
+            }
+        };
+        countDownTimer.start();
+        mStartTime = System.currentTimeMillis();
     }
 
     public void generateNewQuest()
     {
+        mElapsedTime = System.currentTimeMillis() - mStartTime;
+        float ela = ((float)((int)mElapsedTime/100))/10;
+        tvAverage.setText(Float.toString(ela) + "s");
         int n_case = mode.nextInt(6);
         switch (n_case)
         {
