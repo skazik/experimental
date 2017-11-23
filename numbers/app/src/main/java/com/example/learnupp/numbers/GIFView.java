@@ -18,7 +18,7 @@ public class GIFView extends View {
     final int[] resIdlist = new int[] {
             R.drawable.butterfly, R.drawable.banny, R.drawable.dog, R.drawable.sonik
     };
-    final int[][] resIdoffset = new int[][] {{20,270}, {200,300}, {100,0}, {0,10}};
+    final int[][] resIdoffset = new int[][] {{20,270}, {200,300}, {120,50}, {0,10}};
 
     public GIFView(Context context) {
         super(context);

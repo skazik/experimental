@@ -40,6 +40,7 @@ struct TestInfo_t
 
 #define PRIORITY(_arg) (((_arg == Act_Multiply) || (_arg == Act_Divide)) ? 1:0)
 
+static int giAddOnly = 0;
 static char ActSimbol[] = "+-*/";
 static DiffLevel_t ActLevel = Lev_VeryBeginer;
 static DiffLevel_t DisplayLevel = Lev_VeryBeginer;
@@ -195,8 +196,13 @@ void generate_test(TestInfo_t *info, bool bGenerate = true)
 
         if (bGenerate)
         {
-            info->act1 = (MathAction_t) (rand() % act_leveling);
-            info->act2 = (MathAction_t) (rand() % act_leveling);
+            if (giAddOnly) {
+                info->act1 = info->act2 = Act_Plus;
+            }
+            else {
+                info->act1 = (MathAction_t) (rand() % act_leveling);
+                info->act2 = (MathAction_t) (rand() % act_leveling);
+            }
         }
 
         if (PRIORITY(info->act1) >= PRIORITY(info->act2))
@@ -240,6 +246,26 @@ void sprint_quest(char *out, TestInfo_t *info)
 }
 
 static TestInfo_t test;
+
+extern "C"
+JNIEXPORT void
+
+JNICALL
+Java_com_example_learnupp_numbers_MainActivity_setAddOnly(
+        JNIEnv *env,
+        jobject /* this */) {
+    giAddOnly = 1;
+}
+
+extern "C"
+JNIEXPORT void
+
+JNICALL
+Java_com_example_learnupp_numbers_MainActivity_unsetAddOnly(
+        JNIEnv *env,
+        jobject /* this */) {
+    giAddOnly = 0;
+}
 
 extern "C"
 JNIEXPORT jstring
@@ -376,3 +402,4 @@ Java_com_example_learnupp_numbers_MainActivity_getNum3FromJNI(
         jobject /* this */) {
     return test.num3;
 }
+

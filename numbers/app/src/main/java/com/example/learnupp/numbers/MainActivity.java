@@ -1,9 +1,11 @@
 package com.example.learnupp.numbers;
 
+import android.graphics.Point;
 import android.os.CountDownTimer;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -29,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     CountDownTimer countDownTimer = null;
     long mStartTime, mElapsedTime;
 
+    int [][] mCardPos = new int[3][2];
     final int test_level_switch = 5;
     final int[][] cdres = new int[][]
     {
@@ -82,6 +85,8 @@ public class MainActivity extends AppCompatActivity {
      * A native method that is implemented by the 'native-lib' native library,
      * which is packaged with this application.
      */
+    public native void setAddOnly();
+    public native void unsetAddOnly();
     public native String stringFromJNI();
     public native String resultFromJNI();
     public native String get1valFromJNI();
@@ -117,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
         imgCard1 = (ImageView) findViewById(R.id.imageCard1);
         imgCard2 = (ImageView) findViewById(R.id.imageCard2);
         imgCard3 = (ImageView) findViewById(R.id.imageCard3);
+
         tvCardsRes = (TextView) findViewById(R.id.tvCardResult);
         tvCount = (TextView) findViewById(R.id.count);
         tvAverage = (TextView) findViewById(R.id.average);
@@ -153,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAnimationEnd(Animation animation) {
                 makeQuestAndAns();
-                tvQuest.startAnimation(animSlideDown);
+                if (tvQuest != null) tvQuest.startAnimation(animSlideDown);
             }
         });
         animZoomIn.setAnimationListener(new Animation.AnimationListener() {
@@ -164,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAnimationEnd(Animation animation) {
                 makeQuestAndAns();
-                tvQuest.startAnimation(animZoomOut);
+                if (tvQuest != null) tvQuest.startAnimation(animZoomOut);
             }
         });
         animFadeOut.setAnimationListener(new Animation.AnimationListener() {
@@ -175,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAnimationEnd(Animation animation) {
                 makeQuestAndAns();
-                tvQuest.startAnimation(animFadeIn);
+                if (tvQuest != null) tvQuest.startAnimation(animFadeIn);
             }
         });
         animFadeOutOnce.setAnimationListener(new Animation.AnimationListener() {
@@ -208,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAnimationEnd(Animation animation) {
                 makeQuestAndAns();
-                tvQuest.startAnimation(animSlideRight);
+                if (tvQuest != null) tvQuest.startAnimation(animSlideRight);
             }
         });
         animMove.setAnimationListener(new Animation.AnimationListener() {
@@ -218,6 +224,7 @@ public class MainActivity extends AppCompatActivity {
             public void onAnimationRepeat(Animation animation) {}
             @Override
             public void onAnimationEnd(Animation animation) {
+                imgCard3.setVisibility(View.VISIBLE);
                 imgCard2.startAnimation(animMove1);
                 imgCard2.setVisibility(View.VISIBLE);
             }
@@ -241,7 +248,9 @@ public class MainActivity extends AppCompatActivity {
             countDownTimer.cancel();
         }
 
-        tvQuest.setText(stringFromJNI());
+        String new_quest = stringFromJNI();
+        if (tvQuest != null) tvQuest.setText(new_quest);
+
         btAns1.setText(get1valFromJNI());
         btAns2.setText(get2valFromJNI());
         btAns3.setText(get3valFromJNI());
@@ -296,33 +305,114 @@ public class MainActivity extends AppCompatActivity {
         switch (n_case)
         {
             case 0:
-                tvQuest.startAnimation(animSlideUp);
-                // text done in end of animation
-                return;
+                if (tvQuest != null) {
+                    tvQuest.startAnimation(animSlideUp);
+                    return;
+                }
+                break;
             case 1:
-                tvQuest.startAnimation(animRotate);
+                if (tvQuest != null) tvQuest.startAnimation(animRotate);
                 break;
             case 2:
-                tvQuest.startAnimation(animBounce);
+                if (tvQuest != null) tvQuest.startAnimation(animBounce);
                 break;
             case 3:
-                tvQuest.startAnimation(animZoomIn);
-                // text done in end of animation
-                return;
+                if (tvQuest != null) {
+                    tvQuest.startAnimation(animZoomIn);
+                    return;
+                }
+                break;
             case 4:
-                tvQuest.startAnimation(animFadeOut);
-                // text done in end of animation
-                return;
+                if (tvQuest != null) {
+                    tvQuest.startAnimation(animFadeOut);
+                    return;
+                }
+                break;
             case 5:
-                tvQuest.startAnimation(animSlideLeft);
-                // text done in end of animation
-                return;
+                if (tvQuest != null) {
+                    tvQuest.startAnimation(animSlideLeft);
+                    return;
+                }
+                break;
         }
         makeQuestAndAns();
     }
 
     public void changeBackground()
     {
+        if (tvQuest != null) {
+            Display display = getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            int width = size.x;
+            int height = size.y;
+
+            int x = (int) tvQuest.getX();
+            tvQuest.setVisibility(View.INVISIBLE);
+            tvQuest.setX(width);
+
+            mCardPos[0][0] = (int) imgCard1.getX();
+            mCardPos[0][1] = (int) imgCard1.getY();
+            mCardPos[1][0] = (int) imgCard2.getX();
+            mCardPos[1][1] = (int) imgCard2.getY();
+            mCardPos[2][0] = (int) imgCard3.getX();
+            mCardPos[2][1] = (int) imgCard3.getY();
+
+            imgCard1.setVisibility(View.INVISIBLE);
+            imgCard2.setVisibility(View.INVISIBLE);
+            imgCard3.setVisibility(View.INVISIBLE);
+
+            imgCard1.setX(x);
+            imgCard1.setY(tvQuest.getY());
+
+            imgCard2.setX(imgCard1.getX() + imgCard1.getWidth() + 80);
+            imgCard2.setY(imgCard1.getY());
+
+            imgCard3.setX(imgCard2.getX() + imgCard2.getWidth() + 80);
+            imgCard3.setY(imgCard2.getY());
+
+            imgCard1.setScaleX((float) 1.3);
+            imgCard1.setScaleY((float) 1.3);
+            imgCard2.setScaleX((float) 1.3);
+            imgCard2.setScaleY((float) 1.3);
+            imgCard3.setScaleX((float) 1.3);
+            imgCard3.setScaleY((float) 1.3);
+
+            setAddOnly();
+            tvCardsRes.setVisibility(View.INVISIBLE);
+            tvQuest = null;
+        }
+        else
+        {
+            imgCard1 = (ImageView) findViewById(R.id.imageCard1);
+            imgCard2 = (ImageView) findViewById(R.id.imageCard2);
+            imgCard3 = (ImageView) findViewById(R.id.imageCard3);
+
+            tvQuest = (TextView) findViewById(R.id.sample_text);
+            tvQuest.setX(imgCard1.getX());
+
+            imgCard1.setVisibility(View.INVISIBLE);
+            imgCard2.setVisibility(View.INVISIBLE);
+            imgCard3.setVisibility(View.INVISIBLE);
+
+            imgCard1.setScaleX((float) 1.0);
+            imgCard1.setScaleY((float) 1.0);
+            imgCard2.setScaleX((float) 1.0);
+            imgCard2.setScaleY((float) 1.0);
+            imgCard3.setScaleX((float) 1.0);
+            imgCard3.setScaleY((float) 1.0);
+
+            imgCard1.setX(mCardPos[0][0]);
+            imgCard1.setY(mCardPos[0][1]);
+            imgCard2.setX(mCardPos[1][0]);
+            imgCard2.setY(mCardPos[1][1]);
+            imgCard3.setX(mCardPos[2][0]);
+            imgCard3.setY(mCardPos[2][1]);
+
+            unsetAddOnly();
+            tvQuest.setVisibility(View.VISIBLE);
+        }
+
         winningAnimateResChange = true;
         if (++bg_select > 6) bg_select = 0;
         final int[] resin = new int[]{R.drawable.bg1, R.drawable.bg2, R.drawable.bg3, R.drawable.bg4, R.drawable.bg5, R.drawable.bg6, R.drawable.bg7};
@@ -351,29 +441,27 @@ public class MainActivity extends AppCompatActivity {
                 }
                 showWinningAnimation();
             }
+            generateNewQuest();
             return;
         }
         bad++;
         tvBad.setText(bad.toString());
         tvBad.startAnimation(animBlink);
         hideWinningAnimation();
+        generateNewQuest();
     }
 
     public void onClickAns1(View v) {
         validateAns(btAns1.getText().toString());
-        generateNewQuest();
     }
     public void onClickAns2(View v) {
         validateAns(btAns2.getText().toString());
-        generateNewQuest();
     }
     public void onClickAns3(View v) {
         validateAns(btAns3.getText().toString());
-        generateNewQuest();
     }
     public void onClickAns4(View v) {
         validateAns(btAns4.getText().toString());
-        generateNewQuest();
     }
 
     public void setLevelOnTitle(boolean levelOnTitle) {
