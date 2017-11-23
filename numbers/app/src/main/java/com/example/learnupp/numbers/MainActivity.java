@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     Button btAns3;
     Button btAns4;
     Random mode;
+    boolean winningAnimateResChange = false;
     int bg_select = 0;
     Integer bad, good;
     ImageView imgCard1,imgCard2,imgCard3;
@@ -68,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         //{R.drawable.c4_of_clubs,	R.drawable.c4_of_diamonds,	R.drawable.c4_of_hearts,	R.drawable.c4_of_spades},
     };
 
-    Animation animFadeIn,animFadeOut,animZoomIn,animZoomOut,animRotate,
+    Animation animBlink,animFadeIn,animFadeOut,animZoomIn,animZoomOut,animRotate,
             animFadeOutOnce, animFadeInOnce,
             animMove,animMove1,animMove2,
             animSlideUp,animSlideDown,animBounce,animSlideLeft,animSlideRight;
@@ -125,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
 
         animRotate = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate);
         animBounce = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce);
+        animBlink = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.blink);
 
         animFadeOutOnce = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out);
         animFadeOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out);
@@ -268,10 +270,21 @@ public class MainActivity extends AppCompatActivity {
 
             public void onFinish() {
                 tvCount.setText("--:--");
+                hideWinningAnimation();
             }
         };
         countDownTimer.start();
         mStartTime = System.currentTimeMillis();
+    }
+
+    private void showWinningAnimation() {
+        if (gvButter.getVisibility() == View.INVISIBLE)
+            gvButter.startAnimation(animFadeInOnce);
+    }
+
+    private void hideWinningAnimation() {
+        if (gvButter.getVisibility() == View.VISIBLE)
+            gvButter.startAnimation(animFadeOutOnce);
     }
 
     public void generateNewQuest()
@@ -310,6 +323,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void changeBackground()
     {
+        winningAnimateResChange = true;
         if (++bg_select > 6) bg_select = 0;
         final int[] resin = new int[]{R.drawable.bg1, R.drawable.bg2, R.drawable.bg3, R.drawable.bg4, R.drawable.bg5, R.drawable.bg6, R.drawable.bg7};
         ConstraintLayout layout = (ConstraintLayout) findViewById(R.id.appLayout);
@@ -321,22 +335,28 @@ public class MainActivity extends AppCompatActivity {
         String res = resultFromJNI();
         if (res.compareTo(txt) == 0)
         {
-            if (gvButter.getVisibility() == View.INVISIBLE)
-                gvButter.startAnimation(animFadeInOnce);
-
             good++;
             tvGood.setText(good.toString());
+            tvGood.startAnimation(animBlink);
 
             if (good >0 && (good % test_level_switch == 0)) {
                 setLevelOnTitle(true);
+                hideWinningAnimation();
                 changeBackground();
+            }
+            else {
+                if (winningAnimateResChange) {
+                    gvButter.setNextGIFResource();
+                    winningAnimateResChange = false;
+                }
+                showWinningAnimation();
             }
             return;
         }
         bad++;
         tvBad.setText(bad.toString());
-        if (gvButter.getVisibility() == View.VISIBLE)
-            gvButter.startAnimation(animFadeOutOnce);
+        tvBad.startAnimation(animBlink);
+        hideWinningAnimation();
     }
 
     public void onClickAns1(View v) {
