@@ -28,6 +28,9 @@ public class MainActivity extends AppCompatActivity {
     int bg_select = 0;
     Integer bad, good;
     ImageView imgCard1,imgCard2,imgCard3;
+    boolean mCardResEnabled = true;
+    boolean mAdjCardsOnce = true;
+
     CountDownTimer countDownTimer = null;
     long mStartTime, mElapsedTime;
 
@@ -122,6 +125,13 @@ public class MainActivity extends AppCompatActivity {
         imgCard1 = (ImageView) findViewById(R.id.imageCard1);
         imgCard2 = (ImageView) findViewById(R.id.imageCard2);
         imgCard3 = (ImageView) findViewById(R.id.imageCard3);
+
+        imgCard1.setScaleX((float) 0.7);
+        imgCard1.setScaleY((float) 0.7);
+        imgCard2.setScaleX((float) 0.7);
+        imgCard2.setScaleY((float) 0.7);
+        imgCard3.setScaleX((float) 0.7);
+        imgCard3.setScaleY((float) 0.7);
 
         tvCardsRes = (TextView) findViewById(R.id.tvCardResult);
         tvCount = (TextView) findViewById(R.id.count);
@@ -238,7 +248,8 @@ public class MainActivity extends AppCompatActivity {
             public void onAnimationEnd(Animation animation) {
                 imgCard1.startAnimation(animMove2);
                 imgCard1.setVisibility(View.VISIBLE);
-                tvCardsRes.setVisibility(View.VISIBLE);
+                if (mCardResEnabled)
+                    tvCardsRes.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -266,8 +277,26 @@ public class MainActivity extends AppCompatActivity {
         tvCardsRes.setVisibility(View.INVISIBLE);
         tvCardsRes.setText(new Integer(i1+i2+i3).toString());
 
+
         imgCard1.setVisibility(View.INVISIBLE);
         imgCard2.setVisibility(View.INVISIBLE);
+        imgCard3.setVisibility(View.INVISIBLE);
+
+        if (mAdjCardsOnce) {
+            final int y_offset = 1;
+            imgCard1.setX(1);
+            imgCard2.setX(1);
+            imgCard3.setX(1);
+
+            imgCard1.setY(y_offset);
+            imgCard2.setY(1 + y_offset);
+            imgCard3.setY(2 + y_offset);
+//            imgCard2.setY(imgCard1.getHeight() + y_offset);
+//            imgCard3.setY(imgCard2.getHeight() + y_offset);
+
+            mAdjCardsOnce = false;
+        }
+
         imgCard3.startAnimation(animMove);
 
         countDownTimer = new CountDownTimer(11000, 1000) {
@@ -365,20 +394,21 @@ public class MainActivity extends AppCompatActivity {
             imgCard1.setX(x);
             imgCard1.setY(tvQuest.getY());
 
-            imgCard2.setX(imgCard1.getX() + imgCard1.getWidth() + 80);
+            imgCard2.setX(imgCard1.getX() + imgCard1.getWidth() + 20);
             imgCard2.setY(imgCard1.getY());
 
-            imgCard3.setX(imgCard2.getX() + imgCard2.getWidth() + 80);
+            imgCard3.setX(imgCard2.getX() + imgCard2.getWidth() + 20);
             imgCard3.setY(imgCard2.getY());
 
-            imgCard1.setScaleX((float) 1.3);
-            imgCard1.setScaleY((float) 1.3);
-            imgCard2.setScaleX((float) 1.3);
-            imgCard2.setScaleY((float) 1.3);
-            imgCard3.setScaleX((float) 1.3);
-            imgCard3.setScaleY((float) 1.3);
+            imgCard1.setScaleX((float) 1.0);
+            imgCard1.setScaleY((float) 1.0);
+            imgCard2.setScaleX((float) 1.0);
+            imgCard2.setScaleY((float) 1.0);
+            imgCard3.setScaleX((float) 1.0);
+            imgCard3.setScaleY((float) 1.0);
 
             setAddOnly();
+            mCardResEnabled = false;
             tvCardsRes.setVisibility(View.INVISIBLE);
             tvQuest = null;
         }
@@ -395,12 +425,12 @@ public class MainActivity extends AppCompatActivity {
             imgCard2.setVisibility(View.INVISIBLE);
             imgCard3.setVisibility(View.INVISIBLE);
 
-            imgCard1.setScaleX((float) 1.0);
-            imgCard1.setScaleY((float) 1.0);
-            imgCard2.setScaleX((float) 1.0);
-            imgCard2.setScaleY((float) 1.0);
-            imgCard3.setScaleX((float) 1.0);
-            imgCard3.setScaleY((float) 1.0);
+            imgCard1.setScaleX((float) 0.7);
+            imgCard1.setScaleY((float) 0.7);
+            imgCard2.setScaleX((float) 0.7);
+            imgCard2.setScaleY((float) 0.7);
+            imgCard3.setScaleX((float) 0.7);
+            imgCard3.setScaleY((float) 0.7);
 
             imgCard1.setX(mCardPos[0][0]);
             imgCard1.setY(mCardPos[0][1]);

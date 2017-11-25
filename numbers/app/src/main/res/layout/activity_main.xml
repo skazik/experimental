@@ -142,8 +142,6 @@
         android:id="@+id/imageCard1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="6dp"
-        android:layout_marginTop="6dp"
         android:src="@drawable/cblack_joker"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -153,10 +151,10 @@
         android:id="@+id/imageCard2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="6dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="16dp"
         android:src="@drawable/c2_of_clubs"
-        app:layout_constraintTop_toBottomOf="@+id/imageCard1"
+        app:layout_constraintTop_toTopOf="@+id/imageCard1"
         app:layout_constraintLeft_toLeftOf="parent"
         />
 
@@ -164,10 +162,10 @@
         android:id="@+id/imageCard3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="6dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="16dp"
         android:src="@drawable/cred_joker"
-        app:layout_constraintTop_toBottomOf="@+id/imageCard2"
+        app:layout_constraintTop_toTopOf="@+id/imageCard2"
         app:layout_constraintLeft_toLeftOf="parent"
         />
 
@@ -177,12 +175,12 @@
         android:layout_height="wrap_content"
         android:text="7"
         android:textColor="@android:color/black"
-        android:textSize="18sp"
+        android:textSize="14sp"
         android:textStyle="normal"
-        app:layout_constraintTop_toBottomOf="@+id/imageCard3"
         android:layout_marginTop="3dp"
-        app:layout_constraintLeft_toLeftOf="@+id/imageCard3"
-        app:layout_constraintRight_toRightOf="@+id/imageCard3"
+        app:layout_constraintTop_toBottomOf="@+id/imageCard2"
+        app:layout_constraintLeft_toLeftOf="@+id/imageCard1"
+        app:layout_constraintRight_toRightOf="@+id/imageCard1"
         android:gravity="center_horizontal"
         />
 
